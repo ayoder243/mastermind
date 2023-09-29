@@ -54,9 +54,10 @@ end
 
 turn_counter = 0
 code = generate_code()
-guess = get_guess()
-feedback = get_feedback(code, guess)
-
-print code
-print guess
-print feedback
+12.times do
+  guess = get_guess()
+  feedback = get_feedback(code, guess)
+  puts feedback
+  break if feedback == "you win"
+  turn_counter += 0
+end
