@@ -1,15 +1,7 @@
 class MastermindPlayer
   @@POSSIBLE_COLORS = ["green", "yellow", "blue", "orange", "purple", "red"]
   def initialize()
-    
-  end
-
-  def generate_code()
-    code = []
-    4.times do
-      code.push(@@POSSIBLE_COLORS[rand(6)])
-    end
-    return code
+    @guesses = []
   end
 
   def get_feedback(code, guess)
@@ -43,10 +35,21 @@ class MastermindPlayer
 end
 
 class MastermindHuman < MastermindPlayer
-  def initialize()
-    @guesses = []
+  def generate_code()
+    code = []
+    print @@POSSIBLE_COLORS
+    puts
+    print "Position 1: "
+    code.push(gets.chomp())
+    print "Position 2: "
+    code.push(gets.chomp())
+    print "Position 3: "
+    code.push(gets.chomp())
+    print "Position 4: "
+    code.push(gets.chomp())
+    return code
   end
-
+  
   def get_guess()
     guess = []
     print @@POSSIBLE_COLORS
@@ -65,22 +68,57 @@ class MastermindHuman < MastermindPlayer
 end
 
 class MastermindComputer < MastermindPlayer
-  def initialize()
-    @code = []
+  def generate_code()
+    code = []
+    4.times do
+      code.push(@@POSSIBLE_COLORS[rand(6)])
+    end
+    return code
+  end
+  
+  def get_guess()
+    guess = []
+    4.times do
+      guess.push(@@POSSIBLE_COLORS[rand(6)])
+    end
+    @guesses.push(guess)
+    return guess
   end
 end
 
-turn_counter = 0
-human = MastermindHuman.new()
-computer = MastermindComputer.new()
-code = computer.generate_code()
-12.times do
-  guess = human.get_guess()
-  feedback = computer.get_feedback(code, guess)
-  puts feedback
-  break if feedback == "you win"
-  turn_counter += 0
+def human_guesser()
+  turn_counter = 0
+  human = MastermindHuman.new()
+  computer = MastermindComputer.new()
+  code = computer.generate_code()
+  12.times do
+    guess = human.get_guess()
+    feedback = computer.get_feedback(code, guess)
+    puts feedback
+    break if feedback == "you win"
+    turn_counter += 1
+  end
+  if turn_counter == 12
+    puts "you lose"
+  end
 end
-if turn_counter == 13
-  puts "you lose"
+
+def computer_guesser()
+  turn_counter = 0
+  human = MastermindHuman.new()
+  computer = MastermindComputer.new()
+  code = human.generate_code()
+  12.times do
+    guess = computer.get_guess()
+    feedback = human.get_feedback(code, guess)
+    puts feedback
+    break if feedback == "you win"
+    turn_counter += 1
+  end
+  if turn_counter == 13
+    puts "you lose"
+  end
 end
+
+human_guesser()
+computer_guesser()
